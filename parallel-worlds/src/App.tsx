@@ -70,7 +70,7 @@ export function App() {
   const turns = orderedTurns(conversation);
   return <div className="app-shell">
     <aside className="sidebar">
-      <a className="brand" href="/" aria-label="Parallel Worlds home"><span className="brand-symbol">◒</span><span>parallel<br/>worlds<span className="brand-period">.</span></span></a>
+      <a className="brand" href="/" aria-label="Parallel Worlds home"><img className="brand-mark" src="/brand/parallel-worlds.png?v=neon" alt="" /><span>parallel<br/>worlds<span className="brand-period">.</span></span></a>
       <div className="sidebar-intro"><span className="eyebrow">THE CONVERSATION LAB</span><p>A different connection.<br/>A world of possibility.</p></div>
       <div className="scenario-label"><span className="eyebrow">CHOOSE YOUR SCENARIO</span><span>01 — 0{Math.max(scenarios.length, 1)}</span></div>
       <nav aria-label="Scenarios" className="scenario-list">{scenarios.map((s, i) => <button key={s.id} disabled={busy} aria-pressed={selected === s.id}

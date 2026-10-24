@@ -6,6 +6,8 @@ import { HiggsClient, type Activity, type ConnectionState } from './realtime/Hig
 import { api, SessionRecorder } from './recording';
 
 const EMBER_HOME = '/';
+const MILESTONES = 4;
+const MILESTONE_AT = [0.1, 0.367, 0.633, 0.9];
 
 interface Exchange {
   id: string;
@@ -46,48 +48,11 @@ function exchanges(turns: Turn[]): Exchange[] {
   return rows;
 }
 
-function IconX({ className = 'glass-icon' }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M6 6l12 12M18 6L6 18" />
-    </svg>
-  );
-}
-
 function IconMic() {
   return (
     <svg className="glass-icon glass-icon-lg" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z" />
       <path d="M5 11a7 7 0 0 0 14 0M12 18v3" />
-    </svg>
-  );
-}
-
-function IconBranch() {
-  return (
-    <svg className="glass-icon" viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="6" cy="6" r="2.2" />
-      <circle cx="6" cy="18" r="2.2" />
-      <circle cx="18" cy="8" r="2.2" />
-      <path d="M6 8v8M8 7.2c2.4.6 4.2 2.2 5.2 4.2" />
-    </svg>
-  );
-}
-
-function IconRewind() {
-  return (
-    <svg className="glass-icon" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M4 12a8 8 0 1 0 2.3-5.6L4 8" />
-      <path d="M4 4v4.5h4.5" />
-    </svg>
-  );
-}
-
-function IconSpark() {
-  return (
-    <svg className="glass-icon glass-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M12 3l1.4 5.2L18 10l-4.6 1.8L12 17l-1.4-5.2L6 10l4.6-1.8L12 3z" />
-      <path d="M18 14l.6 2 2 .6-2 .6-.6 2-.6-2-2-.6 2-.6.6-2z" />
     </svg>
   );
 }
@@ -103,9 +68,11 @@ export function PhoneDate({ brief }: { brief: PartnerBrief }) {
   const [error, setError] = useState<string | null>(null);
   const [configured, setConfigured] = useState<boolean | null>(null);
   const [conversation, setConversation] = useState(emptyConversation);
-  const [treeOpen, setTreeOpen] = useState(false);
   const [focus, setFocus] = useState<number | null>(null);
   const [wordIndex, setWordIndex] = useState(0);
+  const [menu, setMenu] = useState(false);
+  const [evaluate, setEvaluate] = useState(false);
+  const [milestone, setMilestone] = useState(MILESTONES - 1);
   const client = useRef<HiggsClient | null>(null);
   const armMic = useRef(false);
   const state = useRef<Conversation>(emptyConversation());
@@ -115,7 +82,7 @@ export function PhoneDate({ brief }: { brief: PartnerBrief }) {
   useEffect(() => {
     const meta = document.querySelector('meta[name="theme-color"]');
     const previous = meta?.getAttribute('content');
-    meta?.setAttribute('content', '#0B0E14');
+    meta?.setAttribute('content', '#0c1016');
     return () => { if (previous) meta?.setAttribute('content', previous); };
   }, []);
 
@@ -167,6 +134,8 @@ export function PhoneDate({ brief }: { brief: PartnerBrief }) {
       },
     });
     client.current = c;
+    armMic.current = true;
+    void c.connect();
     return () => {
       mounted = false;
       void c.disconnect();
@@ -180,17 +149,21 @@ export function PhoneDate({ brief }: { brief: PartnerBrief }) {
   const liveRow = [...rows].reverse().find((row) => row.ai) ?? rows[rows.length - 1];
   const shownIndex = focusIndex ?? (liveRow ? rows.indexOf(liveRow) : -1);
   const shown = shownIndex >= 0 ? rows[shownIndex] : undefined;
-  const previous = shownIndex > 0 ? rows[shownIndex - 1] : undefined;
   const idleCopy = connection === 'ready'
-    ? (mic ? `${name} can hear you. Say hello.` : 'The mic is off. Tap it to talk.')
-    : `A first date with ${name}. Tap the mic to begin.`;
-  const caption = (shown?.ai || shown?.user || idleCopy).replace(/\s+/g, ' ').trim();
+    ? (mic ? `${name} can hear you. Say hello.` : 'The microphone is off. Tap it to turn it back on.')
+    : connection === 'connecting'
+      ? `Joining the live date with ${name}.`
+      : `A first date with ${name}.`;
+  const spoken = (text?: string) => {
+    const value = (text || '').replace(/\s+/g, ' ').trim();
+    return value && value !== '…' ? value : '';
+  };
+  const theirLine = spoken(shown?.ai);
+  const yourLine = spoken(shown?.user);
+  const caption = theirLine || yourLine || idleCopy;
   const words = caption.split(' ').filter(Boolean);
   const karaoke = activity === 'speaking' && focusIndex === null && Boolean(shown?.ai);
   const speaking = activity === 'speaking' || (mic && level > 0.05);
-  const liveLabel = connection === 'ready' ? 'Live' : connection === 'connecting' || connection === 'closing' ? 'Wait' : 'Off';
-  const mood = activity === 'speaking' ? 'Talk' : activity === 'thinking' ? 'Wait' : mic ? 'Mic' : 'Date';
-  const bars = [0.08, 0.16, 0.28, 0.42].map((step) => level >= step || (activity === 'speaking' && step < 0.3));
 
   useEffect(() => { setWordIndex(0); }, [caption]);
 
@@ -203,7 +176,10 @@ export function PhoneDate({ brief }: { brief: PartnerBrief }) {
   }, [karaoke, words.length, caption]);
 
   useEffect(() => {
-    if (activity === 'speaking') setFocus(null);
+    if (activity === 'speaking') {
+      setFocus(null);
+      setMilestone(MILESTONES - 1);
+    }
   }, [activity]);
 
   if (!scenario) return null;
@@ -233,22 +209,42 @@ export function PhoneDate({ brief }: { brief: PartnerBrief }) {
     window.location.assign(EMBER_HOME);
   }
 
-  function rewindTo(index: number) {
-    setFocus(index >= rows.length - 1 ? null : index);
-    setTreeOpen(false);
+  function goToMilestone(index: number) {
+    const next = Math.min(MILESTONES - 1, Math.max(0, Math.round(index)));
+    setMilestone(next);
+    if (rows.length < 2) return;
+    const row = Math.round((next / (MILESTONES - 1)) * (rows.length - 1));
+    setFocus(row >= rows.length - 1 ? null : row);
   }
 
   function rewindOne() {
-    const current = focusIndex ?? Math.max(0, rows.length - 1);
-    if (current <= 0) return;
-    setFocus(current - 1);
+    if (milestone <= 0) return;
+    goToMilestone(milestone - 1);
   }
 
-  const micLabel = connection === 'connecting'
-    ? 'Cancel connection'
+  const liveNow = connection === 'ready' && mic;
+  const micLabel = connection === 'connecting' || connection === 'closing'
+    ? 'Joining the live date'
     : connection === 'ready'
-      ? (mic ? 'Turn microphone off' : 'Turn microphone on')
+      ? (mic ? 'Live conversation, microphone on' : 'Live conversation, microphone off')
       : `Talk with ${name}`;
+  const atLive = focusIndex === null;
+  const scrubIndex = shownIndex >= 0 ? shownIndex : Math.max(rows.length - 1, 0);
+  const scrubMax = Math.max(rows.length - 1, 0);
+  const liveSlice = atLive
+    ? (words.length > 1 ? wordIndex / (words.length - 1) : (speaking ? 0.65 : 0.22))
+    : 0;
+  const head = rows.length === 0
+    ? 0.06
+    : atLive
+      ? (Math.max(rows.length - 1, 0) + liveSlice) / rows.length
+      : (scrubIndex + 1) / rows.length;
+
+  function scrubFromPointer(current: HTMLDivElement, clientX: number) {
+    const rect = current.getBoundingClientRect();
+    const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+    goToMilestone(ratio * (MILESTONES - 1));
+  }
 
   return (
     <div className="ember-stage">
@@ -266,130 +262,138 @@ export function PhoneDate({ brief }: { brief: PartnerBrief }) {
             </span>
           </div>
           <div className="ember-island" aria-hidden="true" />
-          <div className="glass-app">
-            <header className="glass-top glass">
-              <button type="button" className="glass-leave" onClick={() => { void leave(); }}>
-                <IconX />
-                <span>Leave</span>
+          <div className={`glass-app pw-call ${evaluate ? 'is-eval' : ''}`} style={{ '--voice': String(Math.min(1, level * 3)), '--head': String(head) } as CSSProperties}>
+            {!evaluate && <div className="pw-photo" style={photo ? { backgroundImage: `url("${photo}")` } : undefined} />}
+            {!evaluate && <div className="pw-veil" />}
+            <header className="pw-call-top">
+              <button type="button" className="pw-icon" aria-label={evaluate ? 'Back to the live date' : 'Leave date'} onClick={() => { if (evaluate) setEvaluate(false); else void leave(); }}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5L8 12l7 7" /></svg>
               </button>
-              <div className={`glass-live ${connection === 'ready' ? 'is-on' : ''}`} aria-live="polite">
-                <i />
-                <span>{liveLabel}</span>
+              <div className="pw-call-brand">
+                <img src="/brand/parallel-worlds.png?v=neon" alt="" />
+                <span>Parallel Worlds</span>
               </div>
-              <div className="glass-mood">
-                <IconSpark />
-                <span className="glass-bars" aria-hidden="true">
-                  {bars.map((on, index) => <i key={index} className={on ? 'on' : ''} />)}
-                </span>
-                <span>{mood}</span>
-              </div>
+              <button type="button" className="pw-icon" aria-label="More" aria-expanded={menu} onClick={() => setMenu((open) => !open)}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="1.3" /><circle cx="12" cy="12" r="1.3" /><circle cx="18" cy="12" r="1.3" /></svg>
+              </button>
+              {menu && <button type="button" className="pw-leave" onClick={() => { void leave(); }}>Leave date</button>}
             </header>
+            <div className="pw-pill">
+              {photo ? <img src={photo} alt="" /> : <span>{name[0]}</span>}
+              <strong>{name}</strong>
+              <i className={connection === 'ready' ? 'on' : ''} />
+            </div>
 
-            <main className="glass-stage">
-              <div className={`glass-aura ${speaking ? 'is-speaking' : ''}`} style={{ '--voice': String(Math.min(1, level * 3)) } as CSSProperties}>
-                <span className="glass-glow" />
-                <span className="glass-ring" />
-                <div className="glass-portrait">
-                  {photo
-                    ? <img src={photo} alt="" />
-                    : <div className="glass-fallback">{name[0]}</div>}
+            {evaluate ? (
+              <section className="pw-eval">
+                <h1>One decision. Two trajectories.</h1>
+                <div className="pw-fork" aria-hidden="true">
+                  <svg viewBox="0 0 340 200">
+                    <text x="4" y="78" className="fork-muted">Shared past</text>
+                    <line x1="8" y1="96" x2="108" y2="96" />
+                    <circle className="fork-node" cx="118" cy="96" r="13" />
+                    <text x="92" y="132" className="fork-muted">Rewind</text>
+                    <path className="fork-original" d="M118 90 C 148 72, 168 50, 182 40" />
+                    <circle className="fork-original-dot" cx="188" cy="38" r="7" />
+                    <text x="108" y="26" className="fork-original-label">Original</text>
+                    <path className="fork-alt" d="M118 102 C 148 118, 168 142, 184 156" />
+                    <circle className="fork-alt-dot" cx="190" cy="158" r="7" />
+                    <text x="96" y="146" className="fork-alt-label">Alternative</text>
+                  </svg>
+                  <div className="pw-score original"><b>78</b><span>Overall<br />communication</span></div>
+                  <div className="pw-score alt"><b>92</b><span>Overall<br />communication</span></div>
                 </div>
-              </div>
-
-              <div className="glass-caption glass">
-                <p className="sr-only">{caption}</p>
-                <p aria-hidden="true">
-                  {words.map((word, index) => (
-                    <span key={`${word}-${index}`} className={!karaoke || index === wordIndex ? 'on' : 'off'}>
-                      {word}{' '}
-                    </span>
-                  ))}
-                </p>
-              </div>
-
-              {previous && (previous.ai || previous.user) && (
-                <button type="button" className="glass-ghost" onClick={rewindOne}>
-                  <span>
-                    <small>Previous turn</small>
-                    <em>“{previous.ai || previous.user}”</em>
+                <article className="pw-insight">
+                  <span aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3 11c.4.4.7.9.8 1.4h4.4c.1-.5.4-1 .8-1.4A6 6 0 0 0 12 3z" /></svg>
                   </span>
-                  <span className="glass-ghost-action">
-                    <IconRewind />
-                    Rewind
-                  </span>
-                </button>
-              )}
-            </main>
-
-            {(configured === false || error) && (
-              <p className={`glass-note ${error ? 'warn' : ''}`} role={error ? 'alert' : undefined}>
-                {error || 'Live voice turns on after the local Boson key is set.'}
-              </p>
+                  <p>In the alternative, you asked a follow-up question, which led to a more open and engaging conversation.</p>
+                </article>
+              </section>
+            ) : (
+              <>
+                <div className="pw-call-stage">
+                  <div
+                    className={`pw-track ${atLive ? 'is-live' : ''}`}
+                    onPointerDown={(event) => {
+                      if ((event.target as HTMLElement).closest('button')) return;
+                      scrubFromPointer(event.currentTarget, event.clientX);
+                      try { event.currentTarget.setPointerCapture(event.pointerId); } catch { /* the drag still tracks the pointer */ }
+                    }}
+                    onPointerMove={(event) => {
+                      if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
+                      scrubFromPointer(event.currentTarget, event.clientX);
+                    }}
+                  >
+                    <span className="pw-track-line" />
+                    {MILESTONE_AT.map((at, index) => {
+                      if (index === milestone || index === milestone - 1) return null;
+                      const passed = index < milestone;
+                      return (
+                        <button
+                          key={index}
+                          type="button"
+                          className={`pw-checkpoint ${passed ? 'passed' : 'ahead'}`}
+                          style={{ left: `${at * 100}%` }}
+                          aria-label={passed ? `Checkpoint ${index + 1}, already passed` : `Checkpoint ${index + 1}`}
+                          onPointerDown={(event) => event.stopPropagation()}
+                          onClick={(event) => { event.stopPropagation(); goToMilestone(index); }}
+                        />
+                      );
+                    })}
+                    {milestone > 0 && (
+                      <button type="button" className="pw-rewind" style={{ left: `${MILESTONE_AT[milestone - 1] * 100}%` }} aria-label={`Rewind to checkpoint ${milestone}`} onPointerDown={(event) => event.stopPropagation()} onClick={(event) => { event.stopPropagation(); rewindOne(); }}>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 7L6 12l5 5" /><path d="M17 7l-5 5 5 5" /></svg>
+                      </button>
+                    )}
+                    <span className="pw-live-thumb" style={{ left: `${MILESTONE_AT[milestone] * 100}%` }} />
+                    <input
+                      type="range"
+                      min={0}
+                      max={MILESTONES - 1}
+                      value={milestone}
+                      aria-label="Move between checkpoints"
+                      onChange={(event) => goToMilestone(Number(event.target.value))}
+                    />
+                  </div>
+                  <p className="sr-only">{caption}</p>
+                </div>
+                {(configured === false || error) && (
+                  <p className={`pw-note ${error ? 'warn' : ''}`} role={error ? 'alert' : undefined}>
+                    {error || 'Live voice turns on after the local Boson key is set.'}
+                  </p>
+                )}
+                <footer className="pw-call-dock">
+                  <button type="button" className="pw-round" onClick={rewindOne} disabled={milestone <= 0}>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6L4 8" /><path d="M4 4v4.5h4.5" /></svg>
+                    <span>Undo</span>
+                  </button>
+                  <button
+                    type="button"
+                    className={`pw-orb ${liveNow ? 'live' : ''} ${speaking ? 'talking' : ''}`}
+                    aria-label={micLabel}
+                    aria-pressed={mic}
+                    disabled={connection === 'closing' || micBusy}
+                    onClick={() => { void onMic(); }}
+                  >
+                    <IconMic />
+                  </button>
+                  <button type="button" className="pw-round" onClick={() => { setMenu(false); setEvaluate(true); }}>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V10M12 19V5M19 19v-7" /></svg>
+                    <span>Evaluate</span>
+                  </button>
+                </footer>
+              </>
             )}
-
-            <footer className="glass-footer">
-              <div className="glass-dock glass">
-                <button type="button" className="glass-dock-btn" onClick={() => setTreeOpen(true)}>
-                  <IconBranch />
-                  <span>Tree</span>
-                </button>
-                <button
-                  type="button"
-                  className={`glass-mic ${mic || speaking ? 'on' : ''}`}
-                  aria-label={micLabel}
-                  aria-pressed={mic}
-                  disabled={connection === 'closing' || micBusy}
-                  onClick={() => { void onMic(); }}
-                >
-                  <IconMic />
-                </button>
-                <button
-                  type="button"
-                  className="glass-dock-btn"
-                  onClick={focusIndex === null ? rewindOne : () => setFocus(null)}
-                  disabled={focusIndex === null && rows.length < 2}
-                >
-                  <IconRewind />
-                  <span>{focusIndex === null ? 'Undo' : 'Now'}</span>
-                </button>
-              </div>
-            </footer>
           </div>
           <div className="ember-home" aria-hidden="true" />
-
-          {treeOpen && (
-            <div className="glass-sheet-root" role="presentation">
-              <button type="button" className="glass-scrim" aria-label="Close parallel realities" onClick={() => setTreeOpen(false)} />
-              <div className="glass-sheet glass" role="dialog" aria-modal="true" aria-labelledby="glass-tree-title">
-                <div className="glass-grabber" />
-                <div className="glass-sheet-head">
-                  <div>
-                    <h2 id="glass-tree-title">Parallel Realities</h2>
-                    <p>Rewind to an earlier line from this date.</p>
-                  </div>
-                  <button type="button" className="glass-close" aria-label="Close" onClick={() => setTreeOpen(false)}>
-                    <IconX />
-                  </button>
-                </div>
-                <div className="glass-tree">
-                  {!rows.length && <p className="glass-tree-empty">No turns yet. Start the date and this path will fill in.</p>}
-                  {rows.map((row, index) => (
-                    <article key={row.id} className={index === shownIndex ? 'is-current' : ''}>
-                      <div>
-                        <small>Turn {index + 1}</small>
-                        <p>You: “{row.user || '…'}”</p>
-                        <p>{name}: “{row.ai || '…'}”</p>
-                      </div>
-                      <button type="button" onClick={() => rewindTo(index)}>
-                        <IconRewind />
-                        Rewind
-                      </button>
-                    </article>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
+          <div className="pw-breath" aria-hidden="true">
+            <span className="b-top" />
+            <span className="b-right" />
+            <span className="b-bottom" />
+            <span className="b-left" />
+            <span className="b-frame" />
+          </div>
         </div>
       </div>
     </div>

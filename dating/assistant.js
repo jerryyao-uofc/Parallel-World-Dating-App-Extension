@@ -10,14 +10,20 @@ let level = 0;
 let lastTick = 0;
 let session = 0;
 
+let leaving = false;
+
 logo.addEventListener("click", () => {
-  if (screen.classList.contains("is-listening")) stop();
-  else start();
+  if (screen.classList.contains("is-listening") || leaving) return;
+  start();
 });
 
-document.querySelector(".practice-jump").addEventListener("click", (event) => {
-  event.preventDefault();
-  if (screen.classList.contains("is-listening")) stop();
+function currentAvatarClip() {
+  return document.querySelector(".pw-transition-stage .avatar-clip, .swipe-card.top .avatar-clip, .detail-view .avatar-clip");
+}
+
+function jumpToPractice() {
+  if (leaving) return;
+  leaving = true;
   const partner = window.emberPracticePartner?.() || null;
   const params = new URLSearchParams();
   if (partner?.name) {
@@ -43,6 +49,7 @@ document.querySelector(".practice-jump").addEventListener("click", (event) => {
     set("saturday", partner.saturday);
     set("sunday", partner.sunday);
     set("surprise", partner.surprise);
+    set("voice", partner.voice);
     if (Array.isArray(partner.interests) && partner.interests.length) {
       set("interests", partner.interests.map((item) => item.label).filter(Boolean).join(", "));
     }
@@ -54,36 +61,89 @@ document.querySelector(".practice-jump").addEventListener("click", (event) => {
   const target = new URL("/practice/", window.location.origin);
   if (window.location.port === "8891") target.port = "5173";
   target.search = params.toString();
+  try {
+    const snap = window.emberSnapshot?.();
+    if (snap) sessionStorage.setItem("tindr-return", JSON.stringify(snap));
+  } catch { /* the date still opens if the browser blocks storage */ }
+  stop();
   window.location.assign(target.href);
+}
+
+function primeClip(clip) {
+  clip.playsInline = true;
+  clip.setAttribute("playsinline", "");
+  clip.setAttribute("webkit-playsinline", "");
+  clip.muted = false;
+  clip.volume = 1;
+  clip.classList.add("is-playing");
+}
+
+function playAvatar() {
+  const clip = currentAvatarClip();
+  if (!clip) {
+    jumpToPractice();
+    return;
+  }
+  primeClip(clip);
+  const stage = document.querySelector(".pw-transition-stage");
+  if (stage && clip.parentElement !== stage) stage.appendChild(clip);
+  clip.preload = "auto";
+  if (!clip.dataset.bound) {
+    clip.dataset.bound = "1";
+    clip.addEventListener("playing", () => clip.classList.add("is-playing"));
+    clip.addEventListener("ended", () => jumpToPractice());
+    clip.addEventListener("error", () => { if (clip.error) jumpToPractice(); });
+  }
+  if (clip.readyState > 0) {
+    try { clip.currentTime = 0; } catch { /* metadata may still be loading */ }
+  }
+  const attempt = clip.play();
+  if (attempt) attempt.catch(() => { if (!clip.ended) clip.play().catch(() => {}); });
+}
+
+function resumeAvatar(id) {
+  const clip = currentAvatarClip();
+  if (id !== session || !clip || clip.ended || leaving) return;
+  if (clip.paused) clip.play().catch(() => {});
+}
+
+function stopAvatar() {
+  document.querySelectorAll(".avatar-clip").forEach((clip) => {
+    clip.pause();
+    clip.classList.remove("is-playing");
+    try { clip.currentTime = 0; } catch { /* ignore */ }
+  });
+}
+
+window.emberSyncAvatar = () => {
+  if (!screen.classList.contains("is-listening")) return;
+  const clip = currentAvatarClip();
+  if (!clip || clip.classList.contains("is-playing") || clip.ended) return;
+  playAvatar();
+};
+
+document.querySelector(".practice-jump").addEventListener("click", (event) => {
+  event.preventDefault();
+  jumpToPractice();
 });
 
-async function start() {
+function start() {
   const id = ++session;
   screen.classList.add("is-listening");
+  playAvatar();
   logo.classList.add("is-on");
   logo.setAttribute("aria-pressed", "true");
-  logo.setAttribute("aria-label", "Lumen, stop listening");
-  try {
-    const mic = await navigator.mediaDevices.getUserMedia({
-      audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
-    });
-    if (id !== session) {
-      mic.getTracks().forEach((track) => track.stop());
-      return;
-    }
-    stream = mic;
-    audioCtx = new AudioContext();
-    await audioCtx.resume();
-    if (id !== session) return stop();
-    const source = audioCtx.createMediaStreamSource(stream);
-    analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 1024;
-    analyser.smoothingTimeConstant = 0.88;
-    source.connect(analyser);
-    meter();
-  } catch {
-    if (id !== session) return;
-  }
+  logo.setAttribute("aria-label", "Parallel Worlds is introducing this date");
+  // Ask for the microphone now, while this tap still counts, then let the video keep the speaker.
+  // The live date on the next page can turn the mic on without another tap.
+  const permit = navigator.mediaDevices?.getUserMedia?.({
+    audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+  });
+  if (!permit) return;
+  permit.then((mic) => {
+    mic.getTracks().forEach((track) => track.stop());
+    resumeAvatar(id);
+  }).catch(() => resumeAvatar(id));
 }
 
 function meter() {
@@ -117,6 +177,7 @@ function meter() {
 
 function stop() {
   session += 1;
+  stopAvatar();
   cancelAnimationFrame(raf);
   raf = 0;
   level = 0;
@@ -124,7 +185,7 @@ function stop() {
   screen.classList.remove("is-listening");
   logo.classList.remove("is-on");
   logo.setAttribute("aria-pressed", "false");
-  logo.setAttribute("aria-label", "Lumen, start listening");
+  logo.setAttribute("aria-label", "Parallel Worlds, practice this date");
   phone.style.setProperty("--voice", "0");
   phone.style.setProperty("--flutter", "0");
   phone.style.setProperty("--flutter2", "0");
@@ -134,3 +195,8 @@ function stop() {
   audioCtx?.close();
   audioCtx = null;
 }
+
+window.emberStopIntro = stop;
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted) stop();
+});

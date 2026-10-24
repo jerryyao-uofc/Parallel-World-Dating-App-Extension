@@ -23,6 +23,14 @@ export interface PartnerBrief {
   sunday?: string;
   surprise?: string;
   photo?: string;
+  voice?: string;
+}
+
+const PRESET_VOICES = new Set(['chloe', 'eleanor', 'jake', 'marcus', 'nora', 'oliver', 'default']);
+
+function presetVoice(value: unknown): string {
+  const voice = clip(value, 24).toLowerCase();
+  return PRESET_VOICES.has(voice) ? voice : 'default';
 }
 
 function clip(value: unknown, max: number): string {
@@ -87,7 +95,7 @@ export function scenarioFromPartner(raw: unknown): Scenario | null {
       values: ['honesty', 'mutual respect', looking || 'authentic connection'],
       motivation: `These facts are the dating profile on screen. Answer as this person and do not change your name, age, gender, education, or hobbies. ${facts}`,
       speakingStyle: 'Keep every reply to one or two short spoken sentences. You are speaking aloud, not writing: no lists, no markdown. Mention a hobby or your education when it fits naturally. A short follow-up is fine; do not interrogate.',
-      voice: 'default',
+      voice: presetVoice(body.voice),
     },
   };
 }
@@ -115,6 +123,7 @@ export function briefFromSearch(search: string): PartnerBrief | null {
     sunday: query.get('sunday') || '',
     surprise: query.get('surprise') || '',
     photo: query.get('photo') || '',
+    voice: query.get('voice') || '',
   };
   return scenarioFromPartner(brief) ? brief : null;
 }

@@ -128,6 +128,15 @@ export class HiggsClient {
     this.options.onEvent({ type: 'client.interrupted', item_id: id, played_ms: played });
     this.send(truncateItem(id, played));
   }
+  sendText(text: string) {
+    const message = text.trim();
+    if (this.state !== 'ready' || !message) return;
+    this.send({
+      type: 'conversation.item.create',
+      item: { type: 'message', role: 'user', content: [{ type: 'input_text', text: message }] },
+    });
+    this.send({ type: 'response.create' });
+  }
   async toggleMic(): Promise<void> {
     if (this.state !== 'ready' || !this.mic) return;
     const gen = this.gen; const mic = this.mic;

@@ -29,229 +29,265 @@ const me = {
 
 const profiles = [
   {
-    id: "amara",
-    name: "Amara",
-    age: 23,
+    id: "zendaya",
+    name: "Zendaya",
+    age: 27,
     gender: "woman",
     verified: true,
-    distance: "2 miles away",
-    job: "Gallery assistant",
-    photo: "photos/amara.jpg",
+    distance: "Los Angeles",
+    job: "Fashion & producing",
+    photo: "photos/zendaya.jpg",
+    voice: "eleanor",
     mutual: true,
     lookingFor: "Long-term partner",
-    cardKicker: "I just realized that...",
-    cardText: "The best conversations start before anyone checks their phone.",
-    about: "I paint bigger than my apartment. If you have a car with a clean trunk, we should talk.",
+    cardKicker: "Be honest...",
+    cardText: "Do you actually finish a three-hour art-house movie, or are you out twenty minutes in?",
+    about: "Probably thinking about my next outfit, or how to reorganize the record collection. I like people who can sit with a long movie and still have a sharp take after.",
     surpriseKicker: "A surprising thing about me...",
-    surprise: "I once traded a painting for six months of coffee.",
-    weekends: "Recharging",
-    saturday: "A gallery, then late noodles",
-    sunday: "A long swim and a sketchbook",
-    zodiac: "Aquarius",
-    education: "Bachelors",
-    height: "5'7\"",
+    surprise: "I will rebuild a closet before I rebuild a plan. The records have to make sense too.",
+    weekends: "Vintage shops",
+    saturday: "A rail of old jackets, then a late screening",
+    sunday: "Poetry, coffee, and one record on repeat",
+    zodiac: "Virgo",
+    education: "Performing arts",
+    height: "5'10\"",
     family: "Open to it",
     interests: [
-      { label: "Painting", hot: true },
-      { label: "Cooking", hot: true },
-      { label: "Indie films", hot: false },
-      { label: "Thrifting", hot: false },
-      { label: "Dogs", hot: true },
-      { label: "Ocean", hot: false },
-      { label: "Galleries", hot: false },
+      { label: "Vintage", hot: true },
+      { label: "Film history", hot: true },
+      { label: "Poetry", hot: false },
+      { label: "Records", hot: true },
+      { label: "Fashion", hot: false },
     ],
   },
   {
-    id: "jordan",
-    name: "Jordan",
-    age: 27,
-    gender: "man",
-    verified: true,
-    distance: "4 miles away",
-    job: "Architect",
-    photo: "photos/jordan.jpg",
-    mutual: false,
-    lookingFor: "Long-term partner",
-    cardKicker: "My simple pleasure...",
-    cardText: "A rooftop, a bad skyline, and someone who will argue about both.",
-    about: "I notice staircases the way other people notice eyes. Show me a city and I'll find the long way through it.",
-    surpriseKicker: "A surprising thing about me...",
-    surprise: "I can sketch a room from memory, then forget where I parked.",
-    weekends: "City walks",
-    saturday: "A rooftop, if the wind is kind",
-    sunday: "Drawing buildings I can't afford",
-    zodiac: "Capricorn",
-    education: "Bachelors",
-    height: "6'1\"",
-    family: "Want someday",
-    interests: [
-      { label: "Architecture", hot: true },
-      { label: "Cities", hot: true },
-      { label: "Cooking", hot: false },
-      { label: "Running", hot: false },
-      { label: "Jazz", hot: true },
-    ],
-  },
-  {
-    id: "elena",
-    name: "Elena",
+    id: "sydney",
+    name: "Sydney",
     age: 26,
     gender: "woman",
     verified: true,
-    distance: "1 mile away",
-    job: "Editor",
-    photo: "photos/elena.jpg",
+    distance: "Los Angeles",
+    job: "Actor & car restorer",
+    photo: "photos/sydney.jpg",
+    voice: "chloe",
     mutual: false,
-    lookingFor: "Long-term partner",
-    cardKicker: "I want someone who...",
-    cardText: "Will sit on a park bench until the light changes and not call it a plan.",
-    about: "Autumn person. I know every bench in the park with decent light, and I will share exactly one of them.",
+    lookingFor: "Not sure yet",
+    cardKicker: "Quick question...",
+    cardText: "If you rebuilt a '69 from scratch, what color would you paint it?",
+    about: "Half my camera roll is scenic views. The other half is grease under my fingernails. I restore old cars, climb when I can, and I will talk you into a lake weekend.",
     surpriseKicker: "A surprising thing about me...",
-    surprise: "I will reorganize a bookshelf in someone else's house.",
-    weekends: "Getting lost",
-    saturday: "Dinner that takes all afternoon",
-    sunday: "The bench with the good light",
+    surprise: "I can name a torque spec and still lose the car keys in my own bag.",
+    weekends: "The garage",
+    saturday: "A climb, then the lake if the light holds",
+    sunday: "Sanding a fender and a very early coffee",
     zodiac: "Virgo",
-    education: "Masters",
-    height: "5'6\"",
-    family: "Not sure yet",
+    education: "On set",
+    height: "5'3\"",
+    family: "Open to it",
     interests: [
-      { label: "Reading", hot: true },
-      { label: "Coffee", hot: true },
-      { label: "Hiking", hot: false },
-      { label: "Film photos", hot: false },
-      { label: "Cooking", hot: true },
-      { label: "Dogs", hot: false },
+      { label: "Vintage cars", hot: true },
+      { label: "Climbing", hot: true },
+      { label: "Camping", hot: false },
+      { label: "Lakes", hot: true },
+      { label: "Road trips", hot: false },
     ],
   },
   {
-    id: "devin",
-    name: "Devin",
-    age: 22,
-    gender: "man",
-    verified: false,
-    distance: "3 miles away",
-    job: "Musician",
-    photo: "photos/devin.jpg",
+    id: "margot",
+    name: "Margot",
+    age: 32,
+    gender: "woman",
+    verified: true,
+    distance: "Los Angeles",
+    job: "Producer",
+    photo: "photos/margot.jpg",
+    voice: "chloe",
     mutual: false,
-    lookingFor: "New friends",
-    cardKicker: "A surprising thing about me...",
-    cardText: "I write the second verse on the subway. Every time.",
-    about: "Most of my songs start as a note I was scared to send. The good ones survive the ride home.",
-    surpriseKicker: "We'll get along if...",
-    surprise: "You stay for the last song even when the room is too loud.",
-    weekends: "Shows",
-    saturday: "Someone else's set, then ramen",
-    sunday: "The verse I avoided all week",
-    zodiac: "Pisces",
-    education: "In college",
+    lookingFor: "Long-term partner",
+    cardKicker: "I need a debate...",
+    cardText: "Tell me your most controversial food opinion. I came ready.",
+    about: "I will argue board-game rules and then drag you to karaoke. Surfing in the morning, a hidden cocktail bar at night, and I do not lose a debate on purpose.",
+    surpriseKicker: "A surprising thing about me...",
+    surprise: "I keep a ranked list of bars that are not on the map, and I will not text it to you.",
+    weekends: "The water",
+    saturday: "A surf, then a board game I will win",
+    sunday: "Karaoke if you can handle it",
+    zodiac: "Cancer",
+    education: "Drama",
+    height: "5'6\"",
+    family: "Want someday",
+    interests: [
+      { label: "Surfing", hot: true },
+      { label: "Board games", hot: true },
+      { label: "Karaoke", hot: false },
+      { label: "Cocktail bars", hot: true },
+      { label: "Banter", hot: false },
+    ],
+  },
+  {
+    id: "rose",
+    name: "Rosé",
+    age: 26,
+    gender: "woman",
+    verified: true,
+    distance: "Seoul",
+    job: "Musician",
+    photo: "photos/rose.jpg",
+    voice: "nora",
+    mutual: false,
+    lookingFor: "Long-term partner",
+    cardKicker: "One album...",
+    cardText: "If you could keep only one album for life, what are you picking?",
+    about: "Studio rat by night, coffee hunter by day. I play guitar, collect vinyl, and I will judge your Spotify Wrapped. Gently. Mostly. My dog gets a vote too.",
+    surpriseKicker: "A surprising thing about me...",
+    surprise: "I can find a bakery in a city I have never been to. The first pastry is research.",
+    weekends: "The studio",
+    saturday: "A new bakery, then vinyl until late",
+    sunday: "A long walk with the dog and one quiet record",
+    zodiac: "Aquarius",
+    education: "Music",
+    height: "5'6\"",
+    family: "Open to it",
+    interests: [
+      { label: "Guitar", hot: true },
+      { label: "Vinyl", hot: true },
+      { label: "Bakeries", hot: false },
+      { label: "Coffee", hot: true },
+      { label: "Dogs", hot: true },
+    ],
+  },
+  {
+    id: "chris",
+    name: "Chris",
+    age: 39,
+    gender: "man",
+    verified: true,
+    distance: "Byron Bay",
+    job: "Explorer",
+    photo: "photos/chris.jpg",
+    voice: "jake",
+    mutual: false,
+    lookingFor: "Long-term partner",
+    cardKicker: "Morning test...",
+    cardText: "Sunrise surf, or sleep until noon? I will still like you.",
+    about: "Professional ocean enthusiast. I lift, I cook outside, and I will probably invite you into freezing water at 6 AM. You can say no. I might ask again.",
+    surpriseKicker: "A surprising thing about me...",
+    surprise: "The cold water is the easy part. I get sentimental about a good breakfast after.",
+    weekends: "The ocean",
+    saturday: "A dawn surf, then something on the grill",
+    sunday: "Weights, a long swim, and an early night",
+    zodiac: "Leo",
+    education: "Acting",
+    height: "6'3\"",
+    family: "Want someday",
+    interests: [
+      { label: "Surfing", hot: true },
+      { label: "Lifting", hot: true },
+      { label: "Outdoor cooking", hot: false },
+      { label: "The ocean", hot: true },
+      { label: "Early mornings", hot: false },
+    ],
+  },
+  {
+    id: "timothee",
+    name: "Timothée",
+    age: 27,
+    gender: "man",
+    verified: true,
+    distance: "New York",
+    job: "Actor",
+    photo: "photos/timothee.jpg",
+    voice: "oliver",
+    mutual: false,
+    lookingFor: "Not sure yet",
+    cardKicker: "Coffee order...",
+    cardText: "Black drip, or the ridiculous iced vanilla oat latte? I will only judge a little.",
+    about: "Probably listening to an album you have never heard of. I sketch, I hunt weird little roasters, and I would like to wander a modern art museum until one of us gets lost.",
+    surpriseKicker: "A surprising thing about me...",
+    surprise: "I will order the complicated drink and then pretend I meant to get a drip.",
+    weekends: "Wandering",
+    saturday: "A gallery, then a coffee I cannot pronounce",
+    sunday: "Sketching and a record nobody requested",
+    zodiac: "Capricorn",
+    education: "LaGuardia",
     height: "5'10\"",
     family: "Not sure yet",
     interests: [
-      { label: "Guitar", hot: true },
-      { label: "Live music", hot: true },
-      { label: "Night walks", hot: false },
-      { label: "Ramen", hot: true },
-      { label: "Photography", hot: false },
+      { label: "Indie music", hot: true },
+      { label: "Sketching", hot: true },
+      { label: "Coffee", hot: false },
+      { label: "Museums", hot: true },
+      { label: "Records", hot: false },
     ],
   },
   {
-    id: "sofia",
-    name: "Sofia",
-    age: 27,
-    gender: "woman",
-    verified: true,
-    distance: "5 miles away",
-    job: "Painter",
-    photo: "photos/sofia.jpg",
-    mutual: false,
-    lookingFor: "Not sure yet",
-    cardKicker: "I know the best spot in town for...",
-    cardText: "Olive oil, and I will judge a kitchen by the bottle on the counter.",
-    about: "The studio is a mess and the work is not. If you can handle paint on a sleeve, you're already doing well.",
-    surpriseKicker: "A surprising thing about me...",
-    surprise: "I learned to cook so I would stop eating cereal over the sink.",
-    weekends: "The studio",
-    saturday: "Jazz and a late table",
-    sunday: "The market, then paint on my hands",
-    zodiac: "Libra",
-    education: "Bachelors",
-    height: "5'5\"",
-    family: "Don't want",
-    interests: [
-      { label: "Painting", hot: true },
-      { label: "Cooking", hot: true },
-      { label: "Jazz", hot: false },
-      { label: "Markets", hot: true },
-      { label: "Museums", hot: false },
-    ],
-  },
-  {
-    id: "leo",
-    name: "Leo",
-    age: 28,
+    id: "michael",
+    name: "Michael",
+    age: 35,
     gender: "man",
     verified: true,
-    distance: "6 miles away",
-    job: "Coach",
-    photo: "photos/leo.jpg",
+    distance: "Los Angeles",
+    job: "Director",
+    photo: "photos/michael.jpg",
+    voice: "marcus",
     mutual: false,
-    lookingFor: "New friends",
-    cardKicker: "My weekends are for...",
-    cardText: "An easy five miles, then a very serious breakfast.",
-    about: "I run early so the rest of the day can be lazy on purpose. Breakfast is non-negotiable.",
+    lookingFor: "Long-term partner",
+    cardKicker: "Lazy Sunday...",
+    cardText: "Anime marathon, or a new restaurant downtown? I am good either way.",
+    about: "Equally comfortable talking business or arguing an anime plot. I box, I game, and I keep a running list of steakhouses worth the trip.",
     surpriseKicker: "A surprising thing about me...",
-    surprise: "I talk to every dog I pass. The owners are optional.",
-    weekends: "Miles",
-    saturday: "A big breakfast at dinner time",
-    sunday: "A slow run and a phone that stays home",
-    zodiac: "Aries",
-    education: "Bachelors",
+    surprise: "I will pause a match to explain a plot twist, then get back in the ring.",
+    weekends: "Off the clock",
+    saturday: "A long session, then a steak I have been saving",
+    sunday: "Anime on the couch, or a table downtown",
+    zodiac: "Aquarius",
+    education: "Film",
     height: "6'0\"",
     family: "Want someday",
     interests: [
-      { label: "Running", hot: true },
-      { label: "Cooking", hot: true },
-      { label: "Dogs", hot: true },
-      { label: "Travel", hot: false },
-      { label: "Breakfast", hot: false },
+      { label: "Boxing", hot: true },
+      { label: "Anime", hot: true },
+      { label: "Gaming", hot: false },
+      { label: "Steakhouses", hot: true },
+      { label: "Directing", hot: false },
     ],
   },
   {
-    id: "maya",
-    name: "Maya",
-    age: 24,
-    gender: "woman",
+    id: "marques",
+    name: "Marques",
+    age: 29,
+    gender: "man",
     verified: true,
-    distance: "2 miles away",
-    job: "Photographer",
-    photo: "photos/maya.jpg",
+    distance: "New Jersey",
+    job: "Tech creator",
+    photo: "photos/marques.jpg",
+    voice: "oliver",
     mutual: false,
     lookingFor: "Long-term partner",
-    cardKicker: "The way to win me over is...",
-    cardText: "Take the window seat, and don't rush the second coffee.",
-    about: "I shoot film because it makes me stay. One roll, then we actually leave the cafe.",
+    cardKicker: "Be honest...",
+    cardText: "Do you care about refresh rates, or do you just buy the pretty phone?",
+    about: "Always testing a gadget or cutting a video. Ask me about camera specs or sports numbers and I will not stop. I also play ultimate, fly a drone, and take gaming nights seriously.",
     surpriseKicker: "A surprising thing about me...",
-    surprise: "I can tell you the hour by the color of the light.",
-    weekends: "Shooting film",
-    saturday: "One roll. One roll only.",
-    sunday: "Coffee until the light goes",
-    zodiac: "Gemini",
-    education: "Bachelors",
-    height: "5'4\"",
+    surprise: "I can explain a sensor for ten minutes and still lose the remote in the couch.",
+    weekends: "Testing things",
+    saturday: "Ultimate, then whatever device showed up this week",
+    sunday: "A drone flight and one game I refuse to pause",
+    zodiac: "Sagittarius",
+    education: "Stevens",
+    height: "6'3\"",
     family: "Open to it",
     interests: [
-      { label: "Film cameras", hot: true },
-      { label: "Coffee", hot: true },
-      { label: "Travel", hot: false },
-      { label: "Cats", hot: true },
-      { label: "Walks", hot: false },
+      { label: "Ultimate", hot: true },
+      { label: "Cameras", hot: true },
+      { label: "Drones", hot: false },
+      { label: "Gadgets", hot: true },
+      { label: "Gaming", hot: false },
     ],
   },
 ];
 
-const DECK_IDS = ["amara", "jordan", "elena", "devin", "sofia", "leo"];
-const INITIAL_LIKES = ["elena", "devin"];
+const DECK_IDS = ["zendaya", "sydney", "margot", "rose", "chris", "timothee", "michael", "marques"];
+const INITIAL_LIKES = ["margot", "timothee"];
 const byId = Object.fromEntries(profiles.map((p) => [p.id, p]));
 
 const state = {
@@ -263,15 +299,15 @@ const state = {
   likesOut: [],
   passes: [],
   blocked: [],
-  matches: ["maya"],
+  matches: ["rose"],
   messages: {
-    maya: [
-      { from: "them", text: "That cafe on Clinton is dangerous. I went for one coffee and stayed two hours.", time: "2h" },
-      { from: "me", text: "Worth it if the window seat was free.", time: "2h" },
-      { from: "them", text: "It was. I'm saving you the corner one.", time: "1h" },
+    rose: [
+      { from: "them", text: "One album for the rest of your life. I am waiting.", time: "3h" },
+      { from: "me", text: "Something I can play in a kitchen. I will not survive a three-hour opera.", time: "2h" },
+      { from: "them", text: "Gentle judgment. The dog liked that answer more than I did.", time: "1h" },
     ],
   },
-  unread: { maya: 1 },
+  unread: { rose: 1 },
   pendingMatch: null,
   detailId: null,
   chatId: null,
@@ -373,9 +409,15 @@ function tabbar() {
   </nav>`;
 }
 
+function avatarClip(p, eager) {
+  if (p.id === me.id) return "";
+  return `<video class="avatar-clip" playsinline webkit-playsinline preload="${eager ? "auto" : "none"}" src="videos/${p.id}.mp4"></video>`;
+}
+
 function cardHtml(p, cls) {
   return `<article class="swipe-card ${cls}" data-id="${p.id}">
     <img class="card-photo" src="${p.photo}" alt="${esc(p.name)}" draggable="false" />
+    ${avatarClip(p, cls === "top")}
     <div class="bars"><span class="on"></span></div>
     <div class="card-shade"></div>
     <div class="stamp like">LIKE</div>
@@ -407,7 +449,7 @@ function discoverView() {
   const off = empty ? "disabled" : "";
   return `<div class="deck-view">
     <header class="topbar">
-      <div class="brand">${icon.flame}<span class="word">ember</span></div>
+      <div class="brand">${icon.flame}<span class="word">Tindr</span></div>
       <button type="button" class="icon-hit bell" data-action="toggle-bell" aria-label="Alerts">
         ${icon.bell}
         ${state.likesIn.length ? '<span class="dot"></span>' : ""}
@@ -570,7 +612,10 @@ function detailView(p) {
       ${hint}
     </header>
     <div class="detail-scroll">
-      <img class="hero" src="${p.photo}" alt="${esc(p.name)}" />
+      <div class="hero-frame">
+        <img class="hero" src="${p.photo}" alt="${esc(p.name)}" />
+        ${avatarClip(p, true)}
+      </div>
       <div class="pad ${self ? "" : "with-actions"}">
         <p class="distance">${esc(p.distance)}${p.job ? ` · ${esc(p.job)}` : ""}</p>
         <div class="section-label">About me</div>
@@ -679,6 +724,33 @@ function mainView() {
   return discoverView();
 }
 
+function transitionHtml() {
+  const p = currentPartner();
+  if (!p || p.id === me.id) return "";
+  const chips = p.interests.slice(0, 4).map((item) => `<span>${esc(item.label)}</span>`).join("");
+  return `<div class="pw-transition">
+    <div class="pw-transition-stage"><img src="${p.photo}" alt="" /></div>
+    <div class="pw-transition-shade"></div>
+    <header class="pw-transition-nav">
+      <button type="button" class="icon-hit light" data-action="exit-practice" aria-label="Back">${icon.back}</button>
+      <button type="button" class="icon-hit light" data-action="open-sheet" aria-label="More"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><circle cx="6" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/></svg></button>
+    </header>
+    <div class="pw-transition-meta">
+      <h1 class="name-line">${esc(p.name)} <span class="age">${p.age}</span>${p.verified ? verifyBadge : ""}</h1>
+      <p class="pw-transition-where"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s6-5.2 6-10a6 6 0 1 0-12 0c0 4.8 6 10 6 10z"/><circle cx="12" cy="11" r="2"/></svg>${esc(p.distance)}</p>
+      <div class="pw-transition-chips">${chips}</div>
+    </div>
+    <div class="pw-transition-actions">
+      <button type="button" class="pw-transition-side" data-action="nope" data-id="${p.id}" aria-label="Pass">${icon.x}</button>
+      <button type="button" class="pw-transition-go" data-action="enter-practice" aria-label="Parallel Worlds">
+        <img src="brand/parallel-worlds.png?v=neon" alt="" />
+        <span>Parallel Worlds</span>
+      </button>
+      <button type="button" class="pw-transition-side like" data-action="like" data-id="${p.id}" aria-label="Like">${icon.heart}</button>
+    </div>
+  </div>`;
+}
+
 function currentPartner() {
   let id = null;
   if (state.overlay === "match") id = state.pendingMatch;
@@ -695,18 +767,109 @@ function currentPartnerName() {
 
 window.emberPracticePartner = currentPartner;
 
+window.emberSnapshot = () => ({
+  tab: state.tab,
+  overlay: state.overlay,
+  deck: state.deck,
+  history: state.history,
+  likesIn: state.likesIn,
+  likesOut: state.likesOut,
+  passes: state.passes,
+  blocked: state.blocked,
+  matches: state.matches,
+  messages: state.messages,
+  unread: state.unread,
+  pendingMatch: state.pendingMatch,
+  detailId: state.detailId,
+  chatId: state.chatId,
+  sheet: state.sheet,
+  sheetId: state.sheetId,
+  bell: state.bell,
+  looking: state.looking,
+  showShieldHint: state.showShieldHint,
+});
+
+function restoreReturn() {
+  let saved = null;
+  try { saved = JSON.parse(sessionStorage.getItem("tindr-return") || "null"); }
+  catch { saved = null; }
+  sessionStorage.removeItem("tindr-return");
+  if (!saved || typeof saved !== "object") return;
+  const known = new Set(profiles.map((p) => p.id));
+  const ids = (list) => Array.isArray(list) ? list.filter((id) => known.has(id)) : null;
+  const one = (id) => (id === me.id || known.has(id) ? id : null);
+  const tabs = ["discover", "explore", "likes", "messages", "profile"];
+  const overlays = ["match", "detail", "chat"];
+  if (tabs.includes(saved.tab)) state.tab = saved.tab;
+  state.overlay = overlays.includes(saved.overlay) ? saved.overlay : null;
+  const deck = ids(saved.deck);
+  if (deck) state.deck = deck;
+  if (Array.isArray(saved.history)) {
+    state.history = saved.history.filter((item) => item && known.has(item.id) && typeof item.action === "string");
+  }
+  const likesIn = ids(saved.likesIn);
+  const likesOut = ids(saved.likesOut);
+  const passes = ids(saved.passes);
+  const blocked = ids(saved.blocked);
+  const matches = ids(saved.matches);
+  if (likesIn) state.likesIn = likesIn;
+  if (likesOut) state.likesOut = likesOut;
+  if (passes) state.passes = passes;
+  if (blocked) state.blocked = blocked;
+  if (matches) state.matches = matches;
+  if (saved.messages && typeof saved.messages === "object") {
+    const messages = {};
+    for (const [id, thread] of Object.entries(saved.messages)) {
+      if (!known.has(id) || !Array.isArray(thread)) continue;
+      messages[id] = thread
+        .filter((item) => item && (item.from === "me" || item.from === "them") && typeof item.text === "string")
+        .map((item) => ({ from: item.from, text: item.text, time: typeof item.time === "string" ? item.time : "" }));
+    }
+    state.messages = messages;
+  }
+  if (saved.unread && typeof saved.unread === "object") {
+    const unread = {};
+    for (const [id, count] of Object.entries(saved.unread)) {
+      if (known.has(id) && Number.isFinite(count)) unread[id] = count;
+    }
+    state.unread = unread;
+  }
+  state.pendingMatch = one(saved.pendingMatch);
+  state.detailId = one(saved.detailId);
+  state.chatId = one(saved.chatId);
+  state.sheetId = one(saved.sheetId);
+  state.sheet = saved.sheet === "menu" || saved.sheet === "report" ? saved.sheet : null;
+  if (!state.sheetId) state.sheet = null;
+  if (state.overlay === "detail" && !state.detailId) state.overlay = null;
+  if (state.overlay === "chat" && !state.chatId) state.overlay = null;
+  if (state.overlay === "match" && !state.pendingMatch) state.overlay = null;
+  state.bell = Boolean(saved.bell);
+  if (["all", "Long-term partner", "New friends", "Not sure yet"].includes(saved.looking)) state.looking = saved.looking;
+  state.showShieldHint = Boolean(saved.showShieldHint);
+}
+
+function screenChrome() {
+  if (!state.overlay) return "tabs";
+  if (state.overlay === "detail" && state.detailId && state.detailId !== me.id) return "actions";
+  if (state.overlay === "chat") return "chat";
+  return "plain";
+}
+
 function render() {
   const showTabs = !state.overlay;
+  document.querySelector(".screen")?.setAttribute("data-chrome", screenChrome());
   document.getElementById("app").innerHTML = `<div class="root">
     ${mainView()}
     ${showTabs ? tabbar() : ""}
     ${popoverHtml()}
     ${sheetHtml()}
+    ${transitionHtml()}
     ${state.toast ? `<div class="toast" role="status">${esc(state.toast)}</div>` : ""}
   </div>`;
   const partner = currentPartnerName();
   const nameEl = document.querySelector(".practice-name");
   if (nameEl) nameEl.textContent = partner || "someone";
+  window.emberSyncAvatar?.();
   const thread = document.querySelector(".thread");
   if (thread) thread.scrollTop = thread.scrollHeight;
   const scroller = document.querySelector(".detail-scroll");
@@ -732,7 +895,7 @@ function commitPass(id) {
 
 function commitLike(id, action) {
   const profile = byId[id];
-  const matched = profile.mutual || state.likesIn.includes(id) || state.matches.includes(id);
+  const matched = !state.matches.includes(id) && (profile.mutual || state.likesIn.includes(id));
   removeFromDeck(id);
   state.passes = state.passes.filter((item) => item !== id);
   state.likesIn = state.likesIn.filter((item) => item !== id);
@@ -888,9 +1051,11 @@ const handlers = {
     state.looking = btn.dataset.value;
     render();
   },
+  "exit-practice"() { window.emberStopIntro?.(); },
+  "enter-practice"() { document.querySelector(".practice-jump")?.click(); },
   "open-sheet"() {
     state.sheet = "menu";
-    state.sheetId = state.overlay === "chat" ? state.chatId : state.detailId;
+    state.sheetId = state.overlay === "chat" ? state.chatId : (state.detailId && state.detailId !== me.id ? state.detailId : state.deck[0]);
     render();
   },
   "close-sheet": closeSheet,
@@ -900,7 +1065,7 @@ const handlers = {
   },
   share() {
     const p = person(state.sheetId);
-    const text = `${p.name}, ${p.age} on Ember`;
+    const text = `${p.name}, ${p.age} on Tindr`;
     navigator.clipboard?.writeText(text).catch(() => {});
     closeSheet();
     showToast("Profile link copied");
@@ -1075,4 +1240,8 @@ app.addEventListener("pointermove", onPointerMove);
 app.addEventListener("pointerup", onPointerUp);
 app.addEventListener("pointercancel", onPointerUp);
 document.addEventListener("keydown", onKey);
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted) sessionStorage.removeItem("tindr-return");
+});
+restoreReturn();
 render();
