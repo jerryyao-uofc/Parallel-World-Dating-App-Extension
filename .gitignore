@@ -1,0 +1,10 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+node_modules/
+.pnpm-store/
+dist/
+captures/
+boson_api_key/
+*.tsbuildinfo
